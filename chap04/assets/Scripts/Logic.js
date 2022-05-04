@@ -54,6 +54,7 @@ cc.Class({
         }        
         if (this.rabbitGray.getComponent("rbGray").isCompleted) {
             this.rabbitBlack.node.active = true
+            this.isCompletedAll = true
         }        
     },
 });
