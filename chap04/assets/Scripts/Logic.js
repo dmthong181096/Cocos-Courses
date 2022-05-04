@@ -11,6 +11,7 @@
 cc.Class({
     extends: cc.Component,
     properties: {
+        _isCompletedAll: false,
         rabbitWhite: {
             default: null,
             type: cc.Component
@@ -28,7 +29,12 @@ cc.Class({
             type: cc.Component
         },
     },
-
+    get isCompletedAll(){
+        return this._isCompletedAll
+    },
+    set isCompletedAll(value){
+        return this._isCompletedAll = value
+    },
     // LIFE-CYCLE CALLBACKS:
 
     // onLoad () {this.rabbitWhite.getComponent("rbWhite").movePixelX = 500},
@@ -36,6 +42,10 @@ cc.Class({
         this.rabbitWhite.active = true
     },
     update (dt) {
+        if (this.isCompletedAll) {
+            cc.log("Break Check Complete")
+            return 
+        }
         if (this.rabbitWhite.getComponent("rbWhite").isCompleted) {
             this.rabbitBrown.node.active = true
         }
