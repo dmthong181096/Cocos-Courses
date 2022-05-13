@@ -16,11 +16,25 @@ cc.Class({
         Emitter.instance.registerEvent(Variables.transPlayer, this.transPlayer, this);
         Emitter.instance.registerEvent(Variables.transAudio, this.transAudio, this);
         Emitter.instance.registerEvent(Variables.transScore, this.transScore, this);
+        Emitter.instance.registerEvent(Variables.transPrincess, this.transPrincess, this);
+        Emitter.instance.registerEvent(Variables.transCloud, this.transCloud, this);
 
+
+
+
+        
         var manager = cc.director.getCollisionManager();
         manager.enabled = true;
-        // manager.enabledDebugDraw = true;
-        // manager.enabledDrawBoundingBox = true;
+        manager.enabledDebugDraw = true;
+        manager.enabledDrawBoundingBox = true;
+    },
+    transCloud(data) {
+        Variables.cloud = data
+        // console.log();
+    },
+    transPrincess(data) {
+        Variables.princess = data
+        // console.log();
     },
     transScore(data) {
         Variables.score = data
@@ -39,13 +53,18 @@ cc.Class({
     transBullet(data) {
         Variables.bullet = data
     },
+    loadAnimBackground(){
+        Variables.boss.anim()
+        Variables.princess.anim()
+        Variables.cloud.anim()
+    },
     // onEnable() {
 
     // },
     start() {
         this.resultBoard.node.active = false
         Emitter.instance.emit(Variables.transBackGround, this)
-        Variables.boss.anim()
+        this.loadAnimBackground()
         Variables.player.portal(Variables.portal, false)
         Emitter.instance.registerEvent(Variables.transBullet, this.transBullet, this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);

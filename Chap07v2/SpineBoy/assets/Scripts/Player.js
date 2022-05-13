@@ -20,13 +20,19 @@ cc.Class({
     onEnable(){ 
     },
     onCollisionEnter: function (collisionObj) {
-        if (collisionObj.node.name =="boom" || collisionObj.node.name == "boss" || collisionObj.node.name == "Stone") {
-            // this.death(Variables.death,false)
-            this.showResult(false);
-        }
-        if (collisionObj.node.name =="Princess") {
-            this.showResult()
-        }
+        // if (Variables.isCollided == false) {
+            if (collisionObj.node.name =="boom" || collisionObj.node.name == "boss" || collisionObj.node.name == "Stone") {
+                Variables.isCollided == true
+                // console.log( this.node.getComponent(cc.BoxCollider));s
+                this.node.getComponent(cc.BoxCollider).enabled = false    
+                this.showResult(false);
+            }
+            if (collisionObj.node.name =="Princess") {
+                // Variables.isCollided == true
+                this.showResult()
+            }
+        // }
+
 
  
     },
@@ -102,6 +108,7 @@ cc.Class({
         this.node.stopAllActions()
         Variables.score.node.stopAllActions()
         Variables.boss.node.stopAllActions()
+        Variables.princess.node.stopAllActions()        
     },
     removeEffect(){
         this.spineBoy.setCompleteListener( ()=> {

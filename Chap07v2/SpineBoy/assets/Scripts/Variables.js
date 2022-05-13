@@ -22,10 +22,13 @@ let Variables = {
     background: null,
     resultBoard: null,
     player: null,
+    princess: null,
     audio: null,
     isCompleted:false,
     isStart: false,
+    isCollided: false,
     score: null,
+    cloud: null,
     //Emit
     transBoss: "transBoss",
     transPlayer: "transPlayer",
@@ -34,6 +37,8 @@ let Variables = {
     transBackGround: "transBackGround",
     transBullet: "transBullet",
     transStone: "transStone",
+    transPrincess: "transPrincess",
+    transCloud: "transCloud",
 }
 module.exports = Variables;
 cc.Class({
