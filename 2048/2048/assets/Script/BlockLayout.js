@@ -9,7 +9,7 @@
 //  - [English] https://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
 
 const Variables = require("./Variables");
-
+const colors = require("./Colors");
 cc.Class({
     extends: cc.Component,
 
@@ -37,6 +37,7 @@ cc.Class({
     onLoad () {
         this.createArray2D(Variables.rows,Variables.cols)
         this.createBlock()
+        this.randomBlock()
     },
 
 
@@ -46,7 +47,7 @@ cc.Class({
             Variables.blocks[i] = new Array()
            for (let j = 0; j < col; j++) {
             //    const element = array[index];
-            Variables.blocks[i][j] = 0
+            Variables.blocks[i][j] = null
                
            }
             
@@ -58,12 +59,50 @@ cc.Class({
         for (let index = 0; index <  Variables.blocks.length; index++) {
             for (let index = 0; index <Variables.blocks.length; index++){
                 let block =  cc.instantiate(this.BlockPrefab)
+                this.setLabel(block,2)
                 block.parent = this.node
             }
             
         }
         
         
+    },
+    setLabel(block,number){
+        if (number == 0) {
+            block.active = false
+        }
+        block.getChildByName("BlockLabel").getComponent(cc.Label).string = number
+        if (number in colors) {
+            block.color = colors[number];
+        }
+    },
+    getEmptyLocations(){
+        let emptyLocations = []
+        for (let row = 0; row < Variables.blocks.length; row++) {
+            for (let col = 0; col < Variables.blocks.length; col++) {
+                if (Variables.blocks[row][col] == null) {
+                    emptyLocations.push({
+                        x: row,
+                        y: col
+                    })
+                }
+                
+            }
+            
+        }
+        console.log(emptyLocations);
+        return emptyLocations
+    },
+
+    randomBlock(){
+        let locations = this.getEmptyLocations()
+        let location = locations[Math.floor(Math.random() * locations.length)];
+        console.log(location);
+        let position = Variables.blocks[location.x,location.y]
+        let block = cc.instantiate(this.BlockPrefab);
+        // this.setLabel(block,2)
+        block.parent = this.node
+        block.setPosition(position);
     },
     start () {
 

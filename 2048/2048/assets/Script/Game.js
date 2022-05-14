@@ -18,20 +18,27 @@ cc.Class({
 
     // LIFE-CYCLE CALLBACKS:
 
-    onLoad () {
+    onLoad() {
+        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
+        // cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
         Emitter.instance = new Emitter();
         // Emitter.instance.registerEvent("HELLO", this.onHello.bind(this));
-        Emitter.instance.registerEvent("transScore", this.transScore,this);
-        Emitter.instance.registerEvent("transBestScore", this.transBestScore,this);
-        
+        Emitter.instance.registerEvent("transScore", this.transScore, this);
+        Emitter.instance.registerEvent("transBestScore", this.transBestScore, this);
+       
+
     },
-    transScore(data){
+    onDestroy() {
+        cc.systemEvent.off(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
+        // cc.systemEvent.off(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
+    },
+    transScore(data) {
         Variables.score = data
     },
     transBestScore(data) {
         Variables.bestScore = data
     },
-    start () {
+    start() {
         // console.log( Variables.score.node);
         this.init()
     },
@@ -40,5 +47,23 @@ cc.Class({
         Variables.bestScore.updateBestScore(20)
     },
 
+
+    onKeyDown: function (event) {
+        switch (event.keyCode) {
+            case cc.macro.KEY.down:
+                console.log('Press a key DOWN');
+                break;
+            case cc.macro.KEY.up:
+                console.log('Press a key UP');
+                break;
+            case cc.macro.KEY.left:
+                console.log('Press a key LEFT');
+                break;
+            case cc.macro.KEY.right:
+                console.log('Press a key RIGHT');
+                break;
+        }
+
+    },
     // update (dt) {},
 });
