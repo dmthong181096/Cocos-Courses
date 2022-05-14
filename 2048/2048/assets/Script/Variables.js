@@ -7,14 +7,17 @@
 // Learn life-cycle callbacks:
 //  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] https://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
-
-const Variables = require("./Variables");
-
+let Variables = {
+    rows: 4,
+    cols: 4,
+    NUMBERS: [2, 4],
+    blocks: []
+}
+module.exports = Variables
 cc.Class({
     extends: cc.Component,
 
     properties: {
-        BlockPrefab: cc.Prefabs
         // foo: {
         //     // ATTRIBUTES:
         //     default: null,        // The default value will be used only when the component attaching
@@ -34,37 +37,8 @@ cc.Class({
 
     // LIFE-CYCLE CALLBACKS:
 
-    onLoad () {
-        this.createArray2D(Variables.rows,Variables.cols)
-        this.createBlock()
-    },
+    // onLoad () {},
 
-
-    createArray2D(row, col) {
-        Variables.blocks = new Array()
-        for (let i = 0; i < row ; i++) {
-            Variables.blocks[i] = new Array()
-           for (let j = 0; j < col; j++) {
-            //    const element = array[index];
-            Variables.blocks[i][j] = 0
-               
-           }
-            
-        }
-        console.log(Variables.blocks);
-        return Variables.blocks
-    },
-    createBlock() {
-        for (let index = 0; index <  Variables.blocks.length; index++) {
-            for (let index = 0; index <Variables.blocks.length; index++){
-                let block =  cc.instantiate(this.BlockPrefab)
-                block.parent = this.node
-            }
-            
-        }
-        
-        
-    },
     start () {
 
     },
