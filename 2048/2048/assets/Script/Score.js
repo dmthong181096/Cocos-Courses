@@ -7,21 +7,13 @@
 // Learn life-cycle callbacks:
 //  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] https://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
-let Variables = {
-    rows: 4,
-    cols: 4,
-    NUMBERS: [2, 4],
-    blocks: [],
-
-
-    score: null,
-    bestScore: null,
-}
-module.exports = Variables
+const Emitter = require('mEmitter');
+const Variables = require('Variables');
 cc.Class({
     extends: cc.Component,
 
     properties: {
+        scoreLabel: cc.Label
         // foo: {
         //     // ATTRIBUTES:
         //     default: null,        // The default value will be used only when the component attaching
@@ -41,11 +33,17 @@ cc.Class({
 
     // LIFE-CYCLE CALLBACKS:
 
-    // onLoad () {},
-
-    start () {
-
+    onLoad () {
+        Emitter.instance.emit('transScore', this);
     },
 
+    start () {
+        
+    },
+    updateScore(number) {
+        
+        this.scoreLabel.string = "SCORE\n" + number
+        console.log( this.scoreLabel.string)
+    }
     // update (dt) {},
 });
