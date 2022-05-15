@@ -21,6 +21,7 @@ cc.Class({
 
     onLoad () {
         Emitter.instance.emit('transBlockLayout', this);
+        console.log(colors);
         this.gameInit()
 
     },
@@ -71,10 +72,9 @@ cc.Class({
         }else {
             block.getChildByName("BlockLabel").getComponent(cc.Label).string = number
         }
-        
-        if (number in colors) {
+
             block.color = colors[number];
-        }
+
     },
     getEmptyLocations(){
         let emptyLocations = []
@@ -101,57 +101,111 @@ cc.Class({
         this.data[x][y] = Variables.numbers[Math.floor(Math.random() * Variables.numbers.length)];
         this.setLabel(Variables.blocks[x][y],this.data[x][y])
     },
+    // moveRight(row,col = 3) {
+    //     console.log("Move right");
+    //     if (col == 0) {
+    //         return;
+    //     }else {
+    //         if (this.data[row][col] == 0) {
+    //             this.data[row][col] = this.data[row][col-1];
+    //             this.data[row][col-1] = 0;
+    //             this.moveRight(row, col - 1); 
+    //             this.updateBlockNum();  
+    //         } else {
+    //             if (this.data[row][col] == this.data[row][col-1]) {
+    //                 this.data[row][col] *= 2
+    //                 this.data[row][col - 1] = 0
+    //                }     
+    //                this.moveRight(row, col -1)
+    //             //    this.updateBlockNum()
+    //         }
+    //         this.moveRight(row, col - 1)
+    //         this.updateBlockNum()
+    //     }
+    // },
     moveRight(row,col = 0) {
         console.log("Move right");
         if (col == Variables.rows-1) {
             return;
         }else {
             if (this.data[row][col+1] == 0) {
-                // let actions = [cc.moveTo(1,Variables.blocks[row][col+1]),cc.callFunc( () => {
-                //     this.data[row][col + 1] = this.data[row][col];
-                //     this.data[row][col] = 0;
-                //     this.moveRight(row, col + 1); // 递归
-                //     this.updateBlockNum();  // 更行方块对应数字颜色
-                // })]
-                // Variables.blocks[row][col].runAction(cc.sequence(actions))
-                // this.data[row][col]
                 this.data[row][col+1] = this.data[row][col];
                 this.data[row][col] = 0;
                 this.moveRight(row, col + 1); 
-                this.updateBlockNum();  
             } else {
                 if (this.data[row][col] == this.data[row][col+1]) {
                     this.data[row][col+1] *= 2
                     this.data[row][col] = 0
-                   }
-                   
+                   }     
             }
-            this.moveRight(row, col +1)
-            this.updateBlockNum()
-          
-            
-
-
-
+            this.moveRight(row, col + 1); 
+            this.updateBlockNum(); 
         }
     },
     moveLeft(row,col = 3) {
+        console.log("Move left");
         if (col == 0) {
             return;
         }else {
-            console.log("Move left");
-            this.data[row][col] == this.data[row][col-1]
-            this.data[row][col- 1] *= 2
-            this.data[row][col] = 0
-            this.moveLeft(row, col - 1)
-                              if (this.data[row][col - 1] == 0) {
-                        this.data[row][col - 1] = this.data[row][col];
-                        this.data[row][col] = 0;
-                        this.updateBlockNum();
-                    }
-            this.updateBlockNum()
+            if (this.data[row][col-1] == 0) {
+                this.data[row][col-1] = this.data[row][col];
+                this.data[row][col] = 0;
+                this.moveLeft(row, col - 1); 
+                this.updateBlockNum();  
+            } else {
+                if (this.data[row][col] == this.data[row][col-1]) {
+                    this.data[row][col-1] *= 2
+                    this.data[row][col] = 0
+                   }     
+                   this.moveLeft(row, col -1)
+                   this.updateBlockNum()
+            }
+
         }
     },
+    moveDown(row = 0,col = 0) {
+        console.log("Move Down");
+        if (row == Variables.rows - 1) {
+            return;
+        }else {
+            if (this.data[row+1][col] == 0) {
+                this.data[row+1][col] = this.data[row][col];
+                this.data[row][col] = 0 
+                this.moveDown(row+1, col)
+                this.updateBlockNum()
+            } else {
+                if (this.data[row][col] == this.data[row+1][col]) {
+                    this.data[row+1][col] *= 2
+                    this.data[row][col] = 0
+                   }     
+                   this.moveDown(row+1, col)
+                    this.updateBlockNum()
+            }
+            
+        }
+    },
+    moveUp(row = 0,col = 0) {
+        console.log("Move Down");
+        if (row == 0) {
+            return;
+        }else {
+            if (this.data[row-1][col] == 0) {
+                this.data[row-1][col] = this.data[row][col];
+                this.data[row][col] = 0 
+                this.moveUp(row-1, col)
+                this.updateBlockNum()
+            } else {
+                if (this.data[row][col] == this.data[row-1][col]) {
+                    this.data[row-1][col] *= 2
+                    this.data[row][col] = 0
+                   }     
+                   this.moveUp(row-1, col)
+                   this.updateBlockNum()
+            }
+
+        }
+    },
+
     
 
     // blockMoveRight: function (row, col) {

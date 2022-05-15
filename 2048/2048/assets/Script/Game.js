@@ -56,9 +56,17 @@ cc.Class({
         switch (event.keyCode) {
             case cc.macro.KEY.down:
                 console.log('Press a key DOWN');
+                for (let col = 0; col < 4; col++) {
+                    Variables.blockLayout.moveDown(0 , col)
+                    
+                }
                 break;
             case cc.macro.KEY.up:
                 console.log('Press a key UP');
+                for (let col = 0; col < 4; col++) {
+                    Variables.blockLayout.moveUp(3 , col)
+                    
+                }
                 break;
             case cc.macro.KEY.left:
                 console.log('Press a key LEFT');
@@ -76,7 +84,7 @@ cc.Class({
                
                 break;
         }
-
+        Variables.blockLayout.randomBlock();
     },
     // update (dt) {},
 });

@@ -10,7 +10,7 @@
 let Variables = {
     rows: 4,
     cols: 4,
-    numbers: [2],
+    numbers: [2,4],
     blocks: [],
     // blockArr: [],
 
