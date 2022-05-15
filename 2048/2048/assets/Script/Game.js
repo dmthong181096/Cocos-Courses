@@ -71,20 +71,31 @@ cc.Class({
             case cc.macro.KEY.left:
                 console.log('Press a key LEFT');
                 for (let row = 0; row < 4; row++) {
+                    Variables.blockLayout._flag = true
                     Variables.blockLayout.moveLeft(row)
                     
                 }
+                Variables.blockLayout.randomBlock();
                 break;
             case cc.macro.KEY.right:
                 console.log('Press a key RIGHT');
                 for (let row = 0; row < 4; row++) {
+                    // console.log(row);
+                    Variables.blockLayout._flag = true
                     Variables.blockLayout.moveRight(row)
                     
+                   
                 }
-               
+                Variables.blockLayout.randomBlock();
                 break;
+            default : {
+                return
+            }
+            
+
+            
         }
-        Variables.blockLayout.randomBlock();
+        
     },
     // update (dt) {},
 });
