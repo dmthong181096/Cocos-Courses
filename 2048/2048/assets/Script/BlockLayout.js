@@ -7,7 +7,7 @@
 // Learn life-cycle callbacks:
 //  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] https://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
-
+const Emitter = require('mEmitter');
 const Variables = require("./Variables");
 const colors = require("./Colors");
 cc.Class({
@@ -15,52 +15,49 @@ cc.Class({
 
     properties: {
         BlockPrefab: cc.Prefabs
-        // foo: {
-        //     // ATTRIBUTES:
-        //     default: null,        // The default value will be used only when the component attaching
-        //                           // to a node for the first time
-        //     type: cc.SpriteFrame, // optional, default is typeof default
-        //     serializable: true,   // optional, default is true
-        // },
-        // bar: {
-        //     get () {
-        //         return this._bar;
-        //     },
-        //     set (value) {
-        //         this._bar = value;
-        //     }
-        // },
     },
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
-        this.createArray2D(Variables.rows,Variables.cols)
-        this.createBlock()
-        this.randomBlock()
-    },
+        Emitter.instance.emit('transBlockLayout', this);
+        this.gameInit()
 
+    },
+    gameInit() {
+        this.createBlocks()
+        this.data = this.createArray2D(4, 4)
+        console.log(this.data);
+        // for (let row = 0; row < 4; row++) {
+        //     for (let col = 0; col < 4; col++) {
+        //         this.setLabel(Variables.blocks[row][col],0)
+        //         this.data[row][col] = 0;
+        //     }
+        // }
+        this.randomBlock();
+        this.randomBlock();
+        // this.randomBlock();
+    },
 
     createArray2D(row, col) {
-        Variables.blocks = new Array()
+        let arr = new Array()
         for (let i = 0; i < row ; i++) {
-            Variables.blocks[i] = new Array()
+            arr[i] = new Array()
            for (let j = 0; j < col; j++) {
-            //    const element = array[index];
-            Variables.blocks[i][j] = null
-               
+                arr[i][j] = 0
            }
-            
         }
-        console.log(Variables.blocks);
-        return Variables.blocks
+        // console.log(blocks);
+        return arr
     },
-    createBlock() {
-        for (let index = 0; index <  Variables.blocks.length; index++) {
-            for (let index = 0; index <Variables.blocks.length; index++){
+    createBlocks() {
+        Variables.blocks = this.createArray2D(4,4)
+        for (let row = 0; row <  Variables.blocks.length; row++) {
+            for (let col = 0; col <  Variables.blocks.length; col++){
                 let block =  cc.instantiate(this.BlockPrefab)
-                this.setLabel(block,2)
+                this.setLabel(block,0)
                 block.parent = this.node
+                Variables.blocks[row][col] = block
             }
             
         }
@@ -69,18 +66,21 @@ cc.Class({
     },
     setLabel(block,number){
         if (number == 0) {
-            block.active = false
+            // block.active = false
+            block.getChildByName("BlockLabel").getComponent(cc.Label).string = ""
+        }else {
+            block.getChildByName("BlockLabel").getComponent(cc.Label).string = number
         }
-        block.getChildByName("BlockLabel").getComponent(cc.Label).string = number
+        
         if (number in colors) {
             block.color = colors[number];
         }
     },
     getEmptyLocations(){
         let emptyLocations = []
-        for (let row = 0; row < Variables.blocks.length; row++) {
-            for (let col = 0; col < Variables.blocks.length; col++) {
-                if (Variables.blocks[row][col] == null) {
+        for (let row = 0; row <  this.data.length; row++) {
+            for (let col = 0; col <  this.data.length; col++) {
+                if (this.data[row][col] == 0) {
                     emptyLocations.push({
                         x: row,
                         y: col
@@ -88,21 +88,112 @@ cc.Class({
                 }
                 
             }
-            
         }
         console.log(emptyLocations);
         return emptyLocations
     },
 
     randomBlock(){
-        let locations = this.getEmptyLocations()
-        let location = locations[Math.floor(Math.random() * locations.length)];
-        console.log(location);
-        let position = Variables.blocks[location.x,location.y]
-        let block = cc.instantiate(this.BlockPrefab);
-        // this.setLabel(block,2)
-        block.parent = this.node
-        block.setPosition(position);
+        let emptyLocations = this.getEmptyLocations()
+        let location = emptyLocations[Math.floor(Math.random() * emptyLocations.length)];
+        let x = location.x
+        let y = location.y;
+        this.data[x][y] = Variables.numbers[Math.floor(Math.random() * Variables.numbers.length)];
+        this.setLabel(Variables.blocks[x][y],this.data[x][y])
+    },
+    moveRight(row,col = 0) {
+        console.log("Move right");
+        if (col == Variables.rows-1) {
+            return;
+        }else {
+            if (this.data[row][col+1] == 0) {
+                // let actions = [cc.moveTo(1,Variables.blocks[row][col+1]),cc.callFunc( () => {
+                //     this.data[row][col + 1] = this.data[row][col];
+                //     this.data[row][col] = 0;
+                //     this.moveRight(row, col + 1); // 递归
+                //     this.updateBlockNum();  // 更行方块对应数字颜色
+                // })]
+                // Variables.blocks[row][col].runAction(cc.sequence(actions))
+                // this.data[row][col]
+                this.data[row][col+1] = this.data[row][col];
+                this.data[row][col] = 0;
+                this.moveRight(row, col + 1); 
+                this.updateBlockNum();  
+            } else {
+                if (this.data[row][col] == this.data[row][col+1]) {
+                    this.data[row][col+1] *= 2
+                    this.data[row][col] = 0
+                   }
+                   
+            }
+            this.moveRight(row, col +1)
+            this.updateBlockNum()
+          
+            
+
+
+
+        }
+    },
+    moveLeft(row,col = 3) {
+        if (col == 0) {
+            return;
+        }else {
+            console.log("Move left");
+            this.data[row][col] == this.data[row][col-1]
+            this.data[row][col- 1] *= 2
+            this.data[row][col] = 0
+            this.moveLeft(row, col - 1)
+                              if (this.data[row][col - 1] == 0) {
+                        this.data[row][col - 1] = this.data[row][col];
+                        this.data[row][col] = 0;
+                        this.updateBlockNum();
+                    }
+            this.updateBlockNum()
+        }
+    },
+    
+
+    // blockMoveRight: function (row, col) {
+    //     if (col == Variables.rows-1) {
+    //         //cc.log("不移动");// test
+    //         return;
+    //     }
+    //     else {
+    //         if (this.data[row][col + 1] == 0) {
+    //             let actions = [cc.moveTo(5,Variables.blocks[row][col+1]),cc.callFunc( () => {
+    //                 // this.data[row][col + 1] = this.data[row][col];
+    //                 // this.data[row][col] = 0;
+    //                 // this.blockMoveRight(row, col + 1); // 递归
+    //                 // this.updateBlockNum();  // 更行方块对应数字颜色
+    //             })]
+    //             Variables.blocks[row][col].runAction(cc.sequence(actions))
+
+    //         }
+    //         else {
+    //             if (col < ROWS-1) {
+    //                 if (this.data[row][col] == this.data[row][col + 1]) {
+    //                     this.data[row][col + 1] *= 2;
+    //                     this.data[row][col] = 0;
+    //                 }
+    //                 this.blockMoveRight(row, col + 1);
+    //                 if (this.data[row][col + 1] == 0) {
+    //                     this.data[row][col + 1] = this.data[row][col];
+    //                     this.data[row][col] = 0;
+    //                     this.updateBlockNum();
+    //                 }
+    //             }
+    //         }
+    //     }
+
+    // },
+    updateBlockNum: function () {
+        // 更新方块数字
+        for (let row = 0; row < 4; row++) {
+            for (let col = 0; col < 4; col++) {
+                this.setLabel(Variables.blocks[row][col],this.data[row][col])
+            }
+        }
     },
     start () {
 

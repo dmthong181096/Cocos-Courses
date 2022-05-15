@@ -100,6 +100,7 @@ cc.Class({
         let locations = this.getEmptyLocations();
         if (locations.length == 0) return false;
         let location = locations[Math.floor(Math.random() * locations.length)];
+        console.log(location);
         let x = location.x;
         let y = location.y;
         let position = this.positions[x][y];

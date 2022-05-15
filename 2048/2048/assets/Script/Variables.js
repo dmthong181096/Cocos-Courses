@@ -10,12 +10,14 @@
 let Variables = {
     rows: 4,
     cols: 4,
-    NUMBERS: [2, 4],
+    numbers: [2],
     blocks: [],
+    // blockArr: [],
 
 
     score: null,
     bestScore: null,
+    blockLayout: null
 }
 module.exports = Variables
 cc.Class({

@@ -23,6 +23,7 @@ cc.Class({
         // cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
         Emitter.instance = new Emitter();
         // Emitter.instance.registerEvent("HELLO", this.onHello.bind(this));
+        Emitter.instance.registerEvent("transBlockLayout", this.transBlockLayout, this);
         Emitter.instance.registerEvent("transScore", this.transScore, this);
         Emitter.instance.registerEvent("transBestScore", this.transBestScore, this);
        
@@ -31,6 +32,9 @@ cc.Class({
     onDestroy() {
         cc.systemEvent.off(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         // cc.systemEvent.off(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
+    },
+    transBlockLayout(data){
+        Variables.blockLayout = data
     },
     transScore(data) {
         Variables.score = data
@@ -58,9 +62,18 @@ cc.Class({
                 break;
             case cc.macro.KEY.left:
                 console.log('Press a key LEFT');
+                for (let row = 0; row < 4; row++) {
+                    Variables.blockLayout.moveLeft(row)
+                    
+                }
                 break;
             case cc.macro.KEY.right:
                 console.log('Press a key RIGHT');
+                for (let row = 0; row < 4; row++) {
+                    Variables.blockLayout.moveRight(row)
+                    
+                }
+               
                 break;
         }
 
