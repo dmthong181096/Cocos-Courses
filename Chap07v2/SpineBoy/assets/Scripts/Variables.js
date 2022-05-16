@@ -27,6 +27,10 @@ let Variables = {
     isCompleted:false,
     isStart: false,
     isCollided: false,
+    isPressedRight: false,
+    isPressedLeft: false,
+    isPressedUp: false,
+    isPressedSpace: false,
     score: null,
     cloud: null,
     //Emit

@@ -19,10 +19,6 @@ cc.Class({
         Emitter.instance.registerEvent(Variables.transPrincess, this.transPrincess, this);
         Emitter.instance.registerEvent(Variables.transCloud, this.transCloud, this);
 
-
-
-
-        
         var manager = cc.director.getCollisionManager();
         manager.enabled = true;
         manager.enabledDebugDraw = true;
@@ -30,11 +26,11 @@ cc.Class({
     },
     transCloud(data) {
         Variables.cloud = data
-        // console.log();
+
     },
     transPrincess(data) {
         Variables.princess = data
-        // console.log();
+
     },
     transScore(data) {
         Variables.score = data
@@ -68,32 +64,76 @@ cc.Class({
         Variables.player.portal(Variables.portal, false)
         Emitter.instance.registerEvent(Variables.transBullet, this.transBullet, this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
+        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
     },
     onDestroy() {
         cc.systemEvent.off(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
     },
     onKeyDown: function (event) {
+        if (Variables.isCompleted == false) {
+            console.log("Not complete");
+            return
+        }
         switch (event.keyCode) {
             case cc.macro.KEY.left:
-                if (Variables.isCompleted == true) {
+                if (Variables.isPressedLeft == false) {
+                    Variables.isPressedRight = false
+                    Variables.isPressedLeft = true
                     Variables.player.back(Variables.run, true)
+                   
+                    console.log("isPressedLeft" , Variables.isPressedLeft);
                 }
                 break;
             case cc.macro.KEY.right:
-                if (Variables.isCompleted == true) {
+                if (Variables.isPressedRight == false) {
+                    Variables.isPressedRight = true
+                    Variables.isPressedLeft = false
+                    console.log("isPressedRight" , Variables.isPressedRight);
                     Variables.player.run(Variables.run, true)   
                 }
                 break;
             case cc.macro.KEY.up:
                 if (Variables.isCompleted == true) {
-                    Variables.player.jump(Variables.jump, true)
+                    Variables.player.jump(Variables.jump, false )
+                    Variables.isPressedRight = false
+                    Variables.isPressedLeft = false
                     Variables.isCompleted = false
                 }
                 break;
             case cc.macro.KEY.space:
-                if (Variables.isStart == true) {
+                if (Variables.isPressedSpace == false && Variables.isStart == true) {
+                    Variables.isPressedRight = false
+                    Variables.isPressedLeft = false
                     Variables.player.shoot(Variables.shoot, false)
                 }
+                break;
+            case cc.macro.KEY.down:
+                // if (Variables.isPressedSpace == false && Variables.isStart == true) {
+                if (Variables.isCompleted == true) {
+                    Variables.isPressedRight = false
+                    Variables.isPressedLeft = false
+                    Variables.isCompleted = false
+                    Variables.player.down(Variables.idle, false)
+
+                }
+                break;
+        }
+
+    },
+    onKeyUp: function (event) {
+        switch (event.keyCode) {
+            case cc.macro.KEY.left:
+                // Variables.isPressedLeft = false
+                break;
+            case cc.macro.KEY.right:
+                // Variables.isPressedRight    z = false
+                break;
+            case cc.macro.KEY.up:
+
+                    Variables.isPressedUp = false   
+
+                break;
+            case cc.macro.KEY.space:
                 break;
         }
     },

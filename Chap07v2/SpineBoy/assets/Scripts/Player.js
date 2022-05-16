@@ -15,20 +15,21 @@ cc.Class({
         Emitter.instance.emit(Variables.transPlayer, this)
         Emitter.instance.registerEvent(Variables.transBackGround, this.transBackGround,this);
         this.spineBoy.setMix(Variables.jump,Variables.idle,0.2)
+        this.spineBoy.setMix(Variables.run,Variables.idle,0.2)
+        this.spineBoy.setMix(Variables.run,Variables.run,0.2)
     },
 
     onEnable(){ 
     },
     onCollisionEnter: function (collisionObj) {
-        // if (Variables.isCollided == false) {
+
             if (collisionObj.node.name =="boom" || collisionObj.node.name == "boss" || collisionObj.node.name == "Stone") {
-                Variables.isCollided == true
-                // console.log( this.node.getComponent(cc.BoxCollider));s
+                // Variables.isCollided == true
+
                 this.node.getComponent(cc.BoxCollider).enabled = false    
                 this.showResult(false);
             }
             if (collisionObj.node.name =="Princess") {
-                // Variables.isCollided == true
                 this.showResult()
             }
         // }
@@ -54,6 +55,10 @@ cc.Class({
         Emitter.instance.emit(Variables.transBullet, bullet)
     },
     shoot(action,loop = false) {
+        // this.spineBoy.node.stopAllActions()
+        // this.spineBoy.clearTracks()
+        // this.spineBoy.setToSetupPose()
+        this.spineBoy.node.stopAllActions()
         this.spineBoy.setAnimation(0,action,loop)
         this.createBullet()
     },
@@ -66,21 +71,53 @@ cc.Class({
         })
     },
     back(action,loop = false) {
+        this.node.stopAllActions()
+        this.spineBoy.clearTracks()
+        this.spineBoy.setToSetupPose()
         this.spineBoy.setAnimation(0,action,loop)
         let actions = [cc.flipX(true),cc.moveBy(1,-180,0)]
-        this.spineBoy.node.runAction(cc.sequence(actions))
+            // ,cc.callFunc(() => {Variables.isPressedLeft = false;Variables.isCompleted = true})]
+
+        // z
+        this.spineBoy.node.runAction(cc.repeatForever(cc.sequence(actions)))
+        // this.removeEffect()
+        
+ 
     },
     run(action,loop = false){
+        this.spineBoy.node.stopAllActions()
+        this.spineBoy.clearTracks()
+        this.spineBoy.setToSetupPose()
         this.spineBoy.setAnimation(0,action,loop)
-        let actions = [cc.flipX(false),cc.moveBy(1,180,0),cc.callFunc ( () => {})]
-        this.spineBoy.node.runAction(cc.sequence(actions))
-        this.removeEffect()
+        let actions = [cc.flipX(false),cc.moveBy(1,180,0)]
+            // ,cc.callFunc ( () => {Variables.isPressedRight = false;Variables.isCompleted = true})]
+        this.spineBoy.node.runAction(cc.repeatForever(cc.sequence(actions)))
+        // this.removeEffect()
     },
     jump(action,loop = false){
-        this.spineBoy.setAnimation(0,action,loop)
-        let jump = this.spineBoy.node.scaleX >0 ? cc.jumpBy(1,250,0,200,1) : cc.jumpBy(1,-250,0,200,1)                
-        this.spineBoy.node.runAction(cc.sequence(jump,cc.callFunc(()=>{Variables.isCompleted = true})))
+        this.spineBoy.node.stopAllActions()
+        this.spineBoy.clearTracks()
+        this.spineBoy.setToSetupPose()
+        
+        
+        let jump = this.spineBoy.node.scaleX >0 ? cc.jumpBy(1,250,0,200,1) : cc.jumpBy(1,-250,0,200,1)   
+                     
+        let actions = [cc.callFunc(()=>{this.spineBoy.setAnimation(0,action,loop)}), jump,cc.callFunc( () =>  {this.spineBoy.setAnimation(0,"idle",loop)}) ,cc.callFunc(()=>{Variables.isCompleted = true})]
+        this.spineBoy.node.runAction(cc.sequence( actions))
+        // this.spineBoy.setCompleteListener( ()=> {
+            // this.spineBoy.clearTracks()
+            // this.spineBoy.setToSetupPose()
+        // })
+        // console.log("RUn");
+        // this.spineBoy.node.getComponent(cc.BoxCollider).offset = cc.v2(this.spineBoy.findBone("torso3").worldX , this.spineBoy.findBone("torso3").worldY )
+        // this.spineBoy.node.getComponent(cc.BoxCollider).offset= cc.v2(this.spinBoy.findBone("torso3").worldX , this.spinBoy.findBone("torso3").worldY );
+       
         this.removeEffect()
+    },
+    down(action,loop = false){
+        this.spineBoy.node.stopAllActions()
+        let actions = [cc.callFunc( ()=> {this.spineBoy.setAnimation(0,Variables.idle,loop)}),cc.callFunc( ()=> {Variables.isCompleted = true})]
+        this.spineBoy.node.runAction(cc.sequence(actions))
     },
     showResult(win = true) {
         Variables.isCompleted = false
@@ -111,11 +148,16 @@ cc.Class({
         Variables.princess.node.stopAllActions()        
     },
     removeEffect(){
-        this.spineBoy.setCompleteListener( ()=> {
-            this.spineBoy.clearTracks()
-            this.spineBoy.setToSetupPose()
-        })
+        // this.spineBoy.setCompleteListener( ()=> {
+        //     this.spineBoy.clearTracks()
+        //     this.spineBoy.setToSetupPose()
+        // })
     },
 
-    // update (dt) {},
+    update (dt) {
+        this.spineBoy.node.getComponent(cc.BoxCollider).offset = cc.v2(this.spineBoy.findBone("torso3").worldX , this.spineBoy.findBone("torso3").worldY )
+        // if (accRight == true) {
+        //     // this.spineBoy.node.x
+        // }
+    },
 });

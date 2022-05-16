@@ -276,7 +276,7 @@
       "__type__": "cc.Vec3",
       "x": 0,
       "y": 0,
-      "z": 390.5774571067819
+      "z": 390.8616216923986
     },
     "_scale": {
       "__type__": "cc.Vec3",
@@ -598,7 +598,7 @@
     "_is3DNode": false,
     "groupIndex": 0,
     "showInEditor": false,
-    "_id": "c67R7XszJAQZ88wvBx5HMc"
+    "_id": "c3EVt8n0pBALTZqkQnIiOd"
   },
   {
     "__type__": "cc.Label",
@@ -630,7 +630,7 @@
     "_N$fontFamily": "Arial",
     "_N$overflow": 0,
     "_N$cacheMode": 0,
-    "_id": "1ef+OAeLJO/YNqberDtR0Y"
+    "_id": "e1G+lnHSRC1KxzjyQG0rtq"
   },
   {
     "__type__": "cc.PrivateNode",
@@ -689,7 +689,7 @@
     "_is3DNode": false,
     "groupIndex": 0,
     "showInEditor": false,
-    "_id": "25m9iTIOVBNaRuA7C6ti5c"
+    "_id": "5ckcilvw5NZpTNMxQ7qfq3"
   },
   {
     "__type__": "cc.Label",
@@ -721,7 +721,7 @@
     "_N$fontFamily": "Arial",
     "_N$overflow": 0,
     "_N$cacheMode": 0,
-    "_id": "3fGx2brstGGJcNowemuUDA"
+    "_id": "27NnPmIRhPjLV4thGG/xFE"
   },
   {
     "__type__": "cc.RichText",
@@ -766,7 +766,7 @@
       "__id__": 2
     },
     "_children": [],
-    "_active": true,
+    "_active": false,
     "_level": 1,
     "_components": [
       {
@@ -1760,7 +1760,7 @@
     "_is3DNode": false,
     "groupIndex": 0,
     "showInEditor": false,
-    "_id": "23Fjpax59L76QGoSkacDAj"
+    "_id": "a85HRGXBNEPKS/dmygJVbB"
   },
   {
     "__type__": "cc.Label",
@@ -1792,7 +1792,7 @@
     "_N$fontFamily": "Arial",
     "_N$overflow": 0,
     "_N$cacheMode": 0,
-    "_id": "e3eIElzF1JzqX6p7tfUyBY"
+    "_id": "8bHPV3L+tCwLrNpBWJqIAW"
   },
   {
     "__type__": "cc.PrivateNode",
@@ -1851,7 +1851,7 @@
     "_is3DNode": false,
     "groupIndex": 0,
     "showInEditor": false,
-    "_id": "e693K6b+1BQb3EYpbret9a"
+    "_id": "bc4N+VX3tHFI4Y42s+C6lt"
   },
   {
     "__type__": "cc.Label",
@@ -1883,7 +1883,7 @@
     "_N$fontFamily": "Arial",
     "_N$overflow": 0,
     "_N$cacheMode": 0,
-    "_id": "92CF92dvJHNovSAUviaO/B"
+    "_id": "d4CrQOR6lGaKJqpdP81GVV"
   },
   {
     "__type__": "cc.RichText",
