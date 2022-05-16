@@ -36,7 +36,7 @@ cc.Class({
         return Math.random() * (max - min) + min;
     },
     onLoad () {
-        Emitter.instance.emit(Variables.transCloud, this)
+        // Emitter.instance.emit(Variables.transCloud, this)
     },
     anim() {
         let actions = [cc.moveBy(3,1500,0),cc.moveTo(0,this.getRandomArbitrary(-200,-100),this.getRandomArbitrary(500,700))]

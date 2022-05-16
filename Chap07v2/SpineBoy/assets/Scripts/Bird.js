@@ -22,8 +22,14 @@ cc.Class({
     onLoad () {
         Emitter.instance.emit(Variables.transBird, this)
     },
+    stopAllAnim() {
+        let anim  =  this.node.getComponent(cc.Animation)
+        anim.enabled = false
+        this.node.stopAllActions()
+    },
     fly() {
         // this.random = Math.floor(Math.random() * (850 - 650) ) + 650 
+        console.log( this.node.getComponent(cc.Animation));
         let actions = [cc.moveBy(10,1500,0),
             // cc.callFunc( ()=> { this.random = Math.floor(Math.random() * (850 - 650 ) ) + 650 ; console.log(this.random);}),
             cc.moveTo(0,-100,650)]

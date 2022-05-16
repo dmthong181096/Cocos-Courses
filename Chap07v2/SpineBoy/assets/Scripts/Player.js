@@ -28,10 +28,10 @@ cc.Class({
                 // Variables.isCollided == true
 
                 this.node.getComponent(cc.BoxCollider).enabled = false    
-                this.showResult(false);
+                Variables.background.showResult(false);
             }
             if (collisionObj.node.name =="Princess") {
-                this.showResult()
+                Variables.background.showResult()
             }
         // }
 
@@ -65,7 +65,7 @@ cc.Class({
         this.spineBoy.setCompleteListener( ()=> {
             Variables.isCompleted = true
             Variables.isStart = true
-            Variables.background.updateScore()
+            // Variables.score.updateScore()
         })
     },
     back(action,loop = false) {
@@ -110,34 +110,35 @@ cc.Class({
         let actions = [cc.callFunc( ()=> {this.spineBoy.setAnimation(0,Variables.idle,loop)}),cc.callFunc( ()=> {Variables.isCompleted = true})]
         this.spineBoy.node.runAction(cc.sequence(actions))
     },
-    showResult(win = true) {
-        Variables.isCompleted = false
-        Variables.isStart = false
-        this.spineBoy.clearTracks()
-        this.stopAllActions()
-        this.score = Variables.background.score + 1
-        if (win) {
-            this.spineBoy.setAnimation(0,Variables.hoverboard,false)
-            this.spineBoy.setCompleteListener( ()=> {
-                Variables.background.resultBoard.node.active = true
-                Variables.background.node.opacity = 150
-                Variables.background.resultBoard.win(this.score)
-            })
-        }else {
-            this.spineBoy.setAnimation(0,Variables.death,false)
-            this.spineBoy.setCompleteListener( ()=> {
-                Variables.background.resultBoard.node.active = true
-                Variables.background.node.opacity = 150
-                Variables.background.resultBoard.lose(this.score)
-            })
-        }
-    },
+    // showResult(win = true) {
+    //     Variables.isCompleted = false
+    //     Variables.isStart = false
+    //     this.spineBoy.clearTracks()
+    //     // this.stopAllActions()
+    //     Variables.background.stopAllAnimBackground()
+    //     this.score = Variables.background.score + 1
+    //     if (win) {
+    //         this.spineBoy.setAnimation(0,Variables.hoverboard,false)
+    //         this.spineBoy.setCompleteListener( ()=> {
+    //             Variables.background.resultBoard.node.active = true
+    //             Variables.background.node.opacity = 150
+    //             Variables.background.resultBoard.win(this.score)
+    //         })
+    //     }else {
+    //         this.spineBoy.setAnimation(0,Variables.death,false)
+    //         this.spineBoy.setCompleteListener( ()=> {
+    //             Variables.background.resultBoard.node.active = true
+    //             Variables.background.node.opacity = 150
+    //             Variables.background.resultBoard.lose(this.score)
+    //         })
+    //     }
+    // },
     stopAllActions() {
-        this.node.stopAllActions()
-        Variables.score.node.stopAllActions()
-        Variables.cloud.node.stopAllActions()
-        Variables.boss.node.stopAllActions()
-        Variables.princess.node.stopAllActions()        
+        // this.node.stopAllActions()
+        // Variables.score.node.stopAllActions()
+        // Variables.cloud.node.stopAllActions()
+        // Variables.boss.node.stopAllActions()
+        // Variables.princess.node.stopAllActions()        
     },
     removeEffect(){
         // this.spineBoy.setCompleteListener( ()=> {

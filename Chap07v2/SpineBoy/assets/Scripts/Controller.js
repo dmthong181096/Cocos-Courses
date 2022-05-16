@@ -17,7 +17,7 @@ cc.Class({
         Emitter.instance.registerEvent(Variables.transAudio, this.transAudio, this);
         Emitter.instance.registerEvent(Variables.transScore, this.transScore, this);
         Emitter.instance.registerEvent(Variables.transPrincess, this.transPrincess, this);
-        Emitter.instance.registerEvent(Variables.transCloud, this.transCloud, this);
+        // Emitter.instance.registerEvent(Variables.transCloud, this.transCloud, this);
         Emitter.instance.registerEvent(Variables.transBird, this.transBird, this);
 
         var manager = cc.director.getCollisionManager();
@@ -58,8 +58,19 @@ cc.Class({
     loadAnimBackground(){
         Variables.boss.anim()
         Variables.princess.anim()
-        Variables.cloud.anim()
+        // Variables.cloud.anim()
         Variables.bird.fly()
+        Variables.score.updateScore()
+    },
+    stopAllAnimBackground(){
+        console.log("Stop All");
+        this.node.stopAllActions()
+        Variables.player.node.stopAllActions()
+        Variables.bird.stopAllAnim()
+        Variables.score.node.stopAllActions()
+        // Variables.cloud.node.stopAllActions()
+        Variables.boss.stopAllAnim()
+        Variables.princess.stopAllAnim()   
     },
     // onEnable() {
 
@@ -147,21 +158,45 @@ cc.Class({
                 break;
         }
     },
-
-    updateScore() {
-        this.score = 100
-        let actions = [cc.callFunc(() => { this.checkScore() }),
-                        cc.delayTime(1),
-                        cc.callFunc(() => { Variables.score.scoreGame.string = "<color=#CD5555>SCORE:</c>" + ` <color=#FFCC33> ${this.score}</color>` })]
-        Variables.score.scoreGame.node.runAction(cc.repeat(cc.sequence(actions), 100))
-    },
-    checkScore() {
-        this.score -= 1
-        if (this.score < 0) {
-            // Variables.player.death(Variables.death, false)
-            Variables.player.showResult(false);
+    showResult(win = true) {
+        Variables.isCompleted = false
+        Variables.isStart = false
+        Variables.player.spineBoy.clearTracks()
+        // this.stopAllActions()
+        this.stopAllAnimBackground()
+        this.score = Variables.score.score +1
+        if (win) {
+            Variables.player.spineBoy.setAnimation(0,Variables.hoverboard,false)
+            Variables.player.spineBoy.setCompleteListener( ()=> {
+                this.resultBoard.node.active = true
+                this.node.opacity = 150
+                this.resultBoard.win(this.score)
+            })
+        }else {
+            Variables.player.spineBoy.setAnimation(0,Variables.death,false)
+            Variables.player.spineBoy.setCompleteListener( ()=> {
+                this.resultBoard.node.active = true
+                this.node.opacity = 150
+                console.log(this.core);
+                this.resultBoard.lose(this.score)
+            })
         }
     },
+
+    // updateScore() {
+    //     this.score = 100
+    //     let actions = [cc.callFunc(() => { this.checkScore() }),
+    //                     cc.delayTime(1),
+    //                     cc.callFunc(() => { Variables.score.scoreGame.string = "<color=#CD5555>SCORE:</c>" + ` <color=#FFCC33> ${this.score}</color>` })]
+    //     Variables.score.scoreGame.node.runAction(cc.repeat(cc.sequence(actions), 100))
+    // },
+    // checkScore() {
+    //     this.score -= 1
+    //     if (this.score < 0) {
+    //         // Variables.player.death(Variables.death, false)
+    //         Variables.player.showResult(false);
+    //     }
+    // },
     update(dt) {
 
     },

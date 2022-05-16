@@ -35,6 +35,9 @@ cc.Class({
                         cc.flipX(false)]
         this.node.runAction(cc.repeatForever(cc.sequence(actions)))
     },
+    stopAllAnim() {
+        this.node.stopAllActions()
+    },
     createStone() {
         let stone = cc.instantiate(this.stone)
         stone.parent = Variables.background.node

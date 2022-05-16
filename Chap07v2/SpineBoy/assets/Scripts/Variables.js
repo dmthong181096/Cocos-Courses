@@ -32,6 +32,7 @@ let Variables = {
     isPressedUp: false,
     isPressedSpace: false,
     score: null,
+    // scoreLabel: 100,
     cloud: null,
     bird: null,
     //Emit
