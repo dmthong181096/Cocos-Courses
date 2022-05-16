@@ -1,0 +1,1 @@
+Bird_01.png.png 17 37, Bird_02.png.png 181 36, Bird_03.png.png 345 44, Bird_04.png.png 12 227, Bird_05.png.png 173 221, Bird_06.png.png 340 214, Bird_07.png.png 19 375, Bird_08.png.png 182 377, Bird_09.png.png 347 370.

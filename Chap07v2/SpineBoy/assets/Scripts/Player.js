@@ -17,6 +17,7 @@ cc.Class({
         this.spineBoy.setMix(Variables.jump,Variables.idle,0.2)
         this.spineBoy.setMix(Variables.run,Variables.idle,0.2)
         this.spineBoy.setMix(Variables.run,Variables.run,0.2)
+        // this.spineBoy.setMix(Variables.idle,Variables.death,0.5)
     },
 
     onEnable(){ 
@@ -55,9 +56,6 @@ cc.Class({
         Emitter.instance.emit(Variables.transBullet, bullet)
     },
     shoot(action,loop = false) {
-        // this.spineBoy.node.stopAllActions()
-        // this.spineBoy.clearTracks()
-        // this.spineBoy.setToSetupPose()
         this.spineBoy.node.stopAllActions()
         this.spineBoy.setAnimation(0,action,loop)
         this.createBullet()
@@ -104,14 +102,7 @@ cc.Class({
                      
         let actions = [cc.callFunc(()=>{this.spineBoy.setAnimation(0,action,loop)}), jump,cc.callFunc( () =>  {this.spineBoy.setAnimation(0,"idle",loop)}) ,cc.callFunc(()=>{Variables.isCompleted = true})]
         this.spineBoy.node.runAction(cc.sequence( actions))
-        // this.spineBoy.setCompleteListener( ()=> {
-            // this.spineBoy.clearTracks()
-            // this.spineBoy.setToSetupPose()
-        // })
-        // console.log("RUn");
-        // this.spineBoy.node.getComponent(cc.BoxCollider).offset = cc.v2(this.spineBoy.findBone("torso3").worldX , this.spineBoy.findBone("torso3").worldY )
-        // this.spineBoy.node.getComponent(cc.BoxCollider).offset= cc.v2(this.spinBoy.findBone("torso3").worldX , this.spinBoy.findBone("torso3").worldY );
-       
+
         this.removeEffect()
     },
     down(action,loop = false){
@@ -144,6 +135,7 @@ cc.Class({
     stopAllActions() {
         this.node.stopAllActions()
         Variables.score.node.stopAllActions()
+        Variables.cloud.node.stopAllActions()
         Variables.boss.node.stopAllActions()
         Variables.princess.node.stopAllActions()        
     },
@@ -156,8 +148,5 @@ cc.Class({
 
     update (dt) {
         this.spineBoy.node.getComponent(cc.BoxCollider).offset = cc.v2(this.spineBoy.findBone("torso3").worldX , this.spineBoy.findBone("torso3").worldY )
-        // if (accRight == true) {
-        //     // this.spineBoy.node.x
-        // }
     },
 });

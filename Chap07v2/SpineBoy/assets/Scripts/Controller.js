@@ -18,11 +18,17 @@ cc.Class({
         Emitter.instance.registerEvent(Variables.transScore, this.transScore, this);
         Emitter.instance.registerEvent(Variables.transPrincess, this.transPrincess, this);
         Emitter.instance.registerEvent(Variables.transCloud, this.transCloud, this);
+        Emitter.instance.registerEvent(Variables.transBird, this.transBird, this);
 
         var manager = cc.director.getCollisionManager();
         manager.enabled = true;
         manager.enabledDebugDraw = true;
         manager.enabledDrawBoundingBox = true;
+    },
+    transBird(data) {
+        console.log("bird");
+        Variables.bird = data
+        console.log(Variables.bird);
     },
     transCloud(data) {
         Variables.cloud = data
@@ -53,10 +59,14 @@ cc.Class({
         Variables.boss.anim()
         Variables.princess.anim()
         Variables.cloud.anim()
+        Variables.bird.fly()
     },
     // onEnable() {
 
     // },
+    init() {
+        
+    },
     start() {
         this.resultBoard.node.active = false
         Emitter.instance.emit(Variables.transBackGround, this)
