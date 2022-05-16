@@ -17,26 +17,24 @@ cc.Class({
         this.spineBoy.setMix(Variables.jump,Variables.idle,0.2)
         this.spineBoy.setMix(Variables.run,Variables.idle,0.2)
         this.spineBoy.setMix(Variables.run,Variables.run,0.2)
-        // this.spineBoy.setMix(Variables.idle,Variables.death,0.5)
     },
 
     onEnable(){ 
     },
     onCollisionEnter: function (collisionObj) {
-
-            if (collisionObj.node.name =="boom" || collisionObj.node.name == "boss" || collisionObj.node.name == "Stone") {
-                // Variables.isCollided == true
-
+             if (collisionObj.node.name =="boom"|| collisionObj.node.name == "boss" || collisionObj.node.name == "Stone" || collisionObj.node.name == "Canvas") {
+                this.node.stopAllActions()
                 this.node.getComponent(cc.BoxCollider).enabled = false    
                 Variables.background.showResult(false);
             }
+            // if (collisionObj.node.name == "Canvas" ) {
+            //     console.log("Canvas");
+            //     this.spineBoy.node.stopAllActions()
+            // }
             if (collisionObj.node.name =="Princess") {
+                Variables.audio.playAudioPrincess()
                 Variables.background.showResult()
             }
-        // }
-
-
- 
     },
     start () {
 
@@ -65,7 +63,6 @@ cc.Class({
         this.spineBoy.setCompleteListener( ()=> {
             Variables.isCompleted = true
             Variables.isStart = true
-            // Variables.score.updateScore()
         })
     },
     back(action,loop = false) {
@@ -74,13 +71,7 @@ cc.Class({
         this.spineBoy.setToSetupPose()
         this.spineBoy.setAnimation(0,action,loop)
         let actions = [cc.flipX(true),cc.moveBy(1,-180,0)]
-            // ,cc.callFunc(() => {Variables.isPressedLeft = false;Variables.isCompleted = true})]
-
-        // z
         this.spineBoy.node.runAction(cc.repeatForever(cc.sequence(actions)))
-        // this.removeEffect()
-        
- 
     },
     run(action,loop = false){
         this.spineBoy.node.stopAllActions()
@@ -88,63 +79,28 @@ cc.Class({
         this.spineBoy.setToSetupPose()
         this.spineBoy.setAnimation(0,action,loop)
         let actions = [cc.flipX(false),cc.moveBy(1,180,0)]
-            // ,cc.callFunc ( () => {Variables.isPressedRight = false;Variables.isCompleted = true})]
         this.spineBoy.node.runAction(cc.repeatForever(cc.sequence(actions)))
-        // this.removeEffect()
     },
     jump(action,loop = false){
         this.spineBoy.node.stopAllActions()
         this.spineBoy.clearTracks()
         this.spineBoy.setToSetupPose()
-        
-        
         let jump = this.spineBoy.node.scaleX >0 ? cc.jumpBy(1,250,0,200,1) : cc.jumpBy(1,-250,0,200,1)   
-                     
         let actions = [cc.callFunc(()=>{this.spineBoy.setAnimation(0,action,loop)}), jump,cc.callFunc( () =>  {this.spineBoy.setAnimation(0,"idle",loop)}) ,cc.callFunc(()=>{Variables.isCompleted = true})]
         this.spineBoy.node.runAction(cc.sequence( actions))
-
         this.removeEffect()
     },
     down(action,loop = false){
         this.spineBoy.node.stopAllActions()
-        let actions = [cc.callFunc( ()=> {this.spineBoy.setAnimation(0,Variables.idle,loop)}),cc.callFunc( ()=> {Variables.isCompleted = true})]
+        let actions = [cc.callFunc( ()=> {this.spineBoy.setAnimation(0,action,loop)}),cc.callFunc( ()=> {Variables.isCompleted = true})]
         this.spineBoy.node.runAction(cc.sequence(actions))
     },
-    // showResult(win = true) {
-    //     Variables.isCompleted = false
-    //     Variables.isStart = false
-    //     this.spineBoy.clearTracks()
-    //     // this.stopAllActions()
-    //     Variables.background.stopAllAnimBackground()
-    //     this.score = Variables.background.score + 1
-    //     if (win) {
-    //         this.spineBoy.setAnimation(0,Variables.hoverboard,false)
-    //         this.spineBoy.setCompleteListener( ()=> {
-    //             Variables.background.resultBoard.node.active = true
-    //             Variables.background.node.opacity = 150
-    //             Variables.background.resultBoard.win(this.score)
-    //         })
-    //     }else {
-    //         this.spineBoy.setAnimation(0,Variables.death,false)
-    //         this.spineBoy.setCompleteListener( ()=> {
-    //             Variables.background.resultBoard.node.active = true
-    //             Variables.background.node.opacity = 150
-    //             Variables.background.resultBoard.lose(this.score)
-    //         })
-    //     }
-    // },
+
     stopAllActions() {
-        // this.node.stopAllActions()
-        // Variables.score.node.stopAllActions()
-        // Variables.cloud.node.stopAllActions()
-        // Variables.boss.node.stopAllActions()
-        // Variables.princess.node.stopAllActions()        
+ 
     },
     removeEffect(){
-        // this.spineBoy.setCompleteListener( ()=> {
-        //     this.spineBoy.clearTracks()
-        //     this.spineBoy.setToSetupPose()
-        // })
+ 
     },
 
     update (dt) {

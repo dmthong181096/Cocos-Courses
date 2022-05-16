@@ -8,13 +8,25 @@ cc.Class({
         animLose: cc.Node,
         animWin: cc.Node,
         rePlayBtn: cc.Node,
+        particleWin: cc.ParticleSystem
     },
     lose(score){
-        let actions = [ cc.callFunc( ()=> { this.hideScore()}),cc.scaleTo(2,1.5),cc.scaleTo(1,1),cc.blink(1,8),cc.callFunc( ()=> {this.showScore()}),cc.callFunc( ()=>{this.updateScore(score)})]
+        
+        this.animLose.active = true
+        this.animWin.active = false
+        let actions = [ cc.callFunc( ()=> { this.hideScore()}),
+                        cc.scaleTo(2,1.5),cc.scaleTo(1,1),cc.blink(1,8),
+                        cc.callFunc( ()=> {this.showScore()}),
+                        cc.callFunc( ()=>{this.updateScore(score)})]
         this.animLose.runAction(cc.sequence(actions))
     },
     win(score){
-        let actions = [ cc.callFunc( ()=> { this.hideScore()}),cc.scaleTo(2,1.5),cc.scaleTo(1,1),cc.blink(1,8),cc.callFunc( ()=> {this.showScore()}),cc.callFunc( ()=>{this.updateScore(score)})]
+        this.particleWin.node.active = true
+        this.animLose.active = false
+        this.animWin.active = true
+        let actions = [ cc.callFunc( ()=> { this.hideScore()}),
+                        cc.scaleTo(2,1.5),cc.scaleTo(1,1),cc.blink(1,8),
+                        cc.callFunc( ()=> {this.showScore()}),cc.callFunc( ()=>{this.updateScore(score)})]
         this.animWin.runAction(cc.sequence(actions))
     },
     hideScore() {
@@ -23,22 +35,13 @@ cc.Class({
     },
     showScore() {
         this.textResult.node.active = true
-
     },
-    // win(score) {
-    //     let countScore = 0
-    //     let actions = [  cc.callFunc(() => {countScore +=1 }),
-    //                     cc.delayTime(0.01),
-    //                     cc.callFunc(() => {   this.textResult.string = `<color=#00ff00>YOU </c><color=#0fffff>WIN</color>\n<color=#CD5555>SCORE:</c> <color=#FFCC33>${countScore}</color>`;})]
-    //     this.textResult.node.runAction(cc.repeat(cc.sequence(actions), score))
-    //     // this.textResult.string = `<color=#00ff00>YOU </c><color=#0fffff>WIN</color>\n<color=#CD5555>SCORE:</c> <color=#FFCC33>${score}</color>`;
-    // },
     rePlay() {
         cc.director.loadScene("SpineBoy");
     },
     updateScore(score) {
         let countScore = 0
-        let actions = [  cc.callFunc(() => {countScore +=1 }),
+        let actions = [ cc.callFunc(() => {countScore +=1 }),
                         cc.delayTime(0.05),
                         cc.callFunc(() => {   this.textResult.string = ` <color=#CD5555>SCORE: </c><color=#FFCC33>${countScore}</color>`;})]
         this.textResult.node.runAction(cc.sequence(cc.repeat(cc.sequence(actions), score),cc.callFunc( ()=> {
@@ -49,6 +52,7 @@ cc.Class({
 
     onLoad () {
         this.rePlayBtn.on('mousedown', this.rePlay,this);
+        this.particleWin.node.active = false
     },
 
     start () {

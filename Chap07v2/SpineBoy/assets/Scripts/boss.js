@@ -20,6 +20,7 @@ cc.Class({
         if (this.hp.progress <= 0.1) {
             return
         }else if (collisionObj.node.name == "Bullet") {
+            Variables.audio.playAudioBoss()
             this.hp.progress -= 0.1
             collisionObj.node.destroy()
             if (this.hp.progress <= 0.1) {

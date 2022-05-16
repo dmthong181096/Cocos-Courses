@@ -17,7 +17,6 @@ cc.Class({
         Emitter.instance.registerEvent(Variables.transAudio, this.transAudio, this);
         Emitter.instance.registerEvent(Variables.transScore, this.transScore, this);
         Emitter.instance.registerEvent(Variables.transPrincess, this.transPrincess, this);
-        // Emitter.instance.registerEvent(Variables.transCloud, this.transCloud, this);
         Emitter.instance.registerEvent(Variables.transBird, this.transBird, this);
 
         var manager = cc.director.getCollisionManager();
@@ -26,17 +25,10 @@ cc.Class({
         manager.enabledDrawBoundingBox = true;
     },
     transBird(data) {
-        console.log("bird");
         Variables.bird = data
-        console.log(Variables.bird);
-    },
-    transCloud(data) {
-        Variables.cloud = data
-
     },
     transPrincess(data) {
         Variables.princess = data
-
     },
     transScore(data) {
         Variables.score = data
@@ -46,37 +38,32 @@ cc.Class({
     },
     transPlayer(data) {
         Variables.player = data
-
     },
     transAudio(data) {
-
         Variables.audio = data
     },
     transBullet(data) {
         Variables.bullet = data
     },
-    loadAnimBackground(){
+    loadAnimBackground() {
+        Variables.audio.playAudioBackground()
         Variables.boss.anim()
         Variables.princess.anim()
-        // Variables.cloud.anim()
         Variables.bird.fly()
         Variables.score.updateScore()
     },
-    stopAllAnimBackground(){
-        console.log("Stop All");
-        this.node.stopAllActions()
-        Variables.player.node.stopAllActions()
+    stopAllAnimBackground() {
+        cc.log("Stop All");
         Variables.bird.stopAllAnim()
         Variables.score.node.stopAllActions()
-        // Variables.cloud.node.stopAllActions()
         Variables.boss.stopAllAnim()
-        Variables.princess.stopAllAnim()   
+        Variables.princess.stopAllAnim()
     },
     // onEnable() {
 
     // },
     init() {
-        
+
     },
     start() {
         this.resultBoard.node.active = false
@@ -92,30 +79,30 @@ cc.Class({
     },
     onKeyDown: function (event) {
         if (Variables.isCompleted == false) {
-            console.log("Not complete");
+            cc.log("Not complete");
             return
         }
         switch (event.keyCode) {
             case cc.macro.KEY.left:
                 if (Variables.isPressedLeft == false) {
+                    Variables.audio.playAudioRun()
                     Variables.isPressedRight = false
                     Variables.isPressedLeft = true
                     Variables.player.back(Variables.run, true)
-                   
-                    console.log("isPressedLeft" , Variables.isPressedLeft);
                 }
                 break;
             case cc.macro.KEY.right:
                 if (Variables.isPressedRight == false) {
+                    Variables.audio.playAudioRun()
                     Variables.isPressedRight = true
                     Variables.isPressedLeft = false
-                    console.log("isPressedRight" , Variables.isPressedRight);
-                    Variables.player.run(Variables.run, true)   
+                    Variables.player.run(Variables.run, true)
                 }
                 break;
             case cc.macro.KEY.up:
                 if (Variables.isCompleted == true) {
-                    Variables.player.jump(Variables.jump, false )
+                    Variables.audio.playAudioJump()
+                    Variables.player.jump(Variables.jump, false)
                     Variables.isPressedRight = false
                     Variables.isPressedLeft = false
                     Variables.isCompleted = false
@@ -123,19 +110,19 @@ cc.Class({
                 break;
             case cc.macro.KEY.space:
                 if (Variables.isPressedSpace == false && Variables.isStart == true) {
+                    Variables.audio.playAudioShoot()
                     Variables.isPressedRight = false
                     Variables.isPressedLeft = false
                     Variables.player.shoot(Variables.shoot, false)
                 }
                 break;
             case cc.macro.KEY.down:
-                // if (Variables.isPressedSpace == false && Variables.isStart == true) {
                 if (Variables.isCompleted == true) {
+                    Variables.audio.pauseAll()
                     Variables.isPressedRight = false
                     Variables.isPressedLeft = false
                     Variables.isCompleted = false
                     Variables.player.down(Variables.idle, false)
-
                 }
                 break;
         }
@@ -144,15 +131,11 @@ cc.Class({
     onKeyUp: function (event) {
         switch (event.keyCode) {
             case cc.macro.KEY.left:
-                // Variables.isPressedLeft = false
                 break;
             case cc.macro.KEY.right:
-                // Variables.isPressedRight    z = false
                 break;
             case cc.macro.KEY.up:
-
-                    Variables.isPressedUp = false   
-
+                Variables.isPressedUp = false
                 break;
             case cc.macro.KEY.space:
                 break;
@@ -162,41 +145,27 @@ cc.Class({
         Variables.isCompleted = false
         Variables.isStart = false
         Variables.player.spineBoy.clearTracks()
-        // this.stopAllActions()
         this.stopAllAnimBackground()
-        this.score = Variables.score.score +1
+        this.score = Variables.score.score + 1
         if (win) {
-            Variables.player.spineBoy.setAnimation(0,Variables.hoverboard,false)
-            Variables.player.spineBoy.setCompleteListener( ()=> {
+            Variables.player.spineBoy.setAnimation(0, Variables.hoverboard, false)
+            Variables.player.spineBoy.setCompleteListener(() => {
                 this.resultBoard.node.active = true
-                this.node.opacity = 150
+                this.node.opacity = 100
                 this.resultBoard.win(this.score)
+                Variables.audio.playAudioWin()
             })
-        }else {
-            Variables.player.spineBoy.setAnimation(0,Variables.death,false)
-            Variables.player.spineBoy.setCompleteListener( ()=> {
+        } else {
+            Variables.player.spineBoy.setAnimation(0, Variables.death, false)
+            Variables.audio.playAudioDeath()
+            Variables.player.spineBoy.setCompleteListener(() => {
                 this.resultBoard.node.active = true
-                this.node.opacity = 150
-                console.log(this.core);
+                this.node.opacity = 100
                 this.resultBoard.lose(this.score)
+                Variables.audio.playAudioLose()
             })
         }
     },
-
-    // updateScore() {
-    //     this.score = 100
-    //     let actions = [cc.callFunc(() => { this.checkScore() }),
-    //                     cc.delayTime(1),
-    //                     cc.callFunc(() => { Variables.score.scoreGame.string = "<color=#CD5555>SCORE:</c>" + ` <color=#FFCC33> ${this.score}</color>` })]
-    //     Variables.score.scoreGame.node.runAction(cc.repeat(cc.sequence(actions), 100))
-    // },
-    // checkScore() {
-    //     this.score -= 1
-    //     if (this.score < 0) {
-    //         // Variables.player.death(Variables.death, false)
-    //         Variables.player.showResult(false);
-    //     }
-    // },
     update(dt) {
 
     },
