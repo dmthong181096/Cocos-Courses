@@ -2,6 +2,14 @@
 const Emitter = require('mEmitter');
 const Variables = require("./Variables");
 const colors = require("./Colors");
+
+
+// const UserData = new Object()
+// ({
+//     score: 0,
+//     moveStep : 0
+// })
+// const { userData } = require('./Variables');
 // const { log } = require('../../build/web-desktop/cocos2d-js');
 cc.Class({
     extends: cc.Component,
@@ -32,9 +40,25 @@ cc.Class({
         let extra = this.scoreExtra
 
         Variables.scoreGame += this.scoreExtra
+
+
+        let userData = new Object()
+        userData.score =  Variables.scoreGame
+        userData.moveStep = 10
+        // Variables.bestScore.saveBestScore(userData)
+        let bestScore = Variables.bestScore.loadBestScore()
+        console.log(bestScore.score);
+        if ( userData.score >  bestScore.score) {
+            console.log("save bestScore :",userData.score);
+            Variables.bestScore.saveBestScore(userData)
+            Variables.bestScore.loadBestScore()
+        }
         Variables.score.updateExtraScore(extra)
         Variables.score.updateScore( Variables.scoreGame)
         this.scoreExtra = 0
+        // if ( Variables.scoreGame > ) {
+            
+        // }
         // return Variables.scoreGame += score
     },
     createArray2D(row, col) {

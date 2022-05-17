@@ -26,6 +26,7 @@ cc.Class({
         Emitter.instance.registerEvent("transBlockLayout", this.transBlockLayout, this);
         Emitter.instance.registerEvent("transScore", this.transScore, this);
         Emitter.instance.registerEvent("transBestScore", this.transBestScore, this);
+        // cc.sys.localStorage.removeItem("userData")
        
 
     },
@@ -48,7 +49,12 @@ cc.Class({
     },
     init() {
         // Variables.score.updateScore(10)
-        Variables.bestScore.updateBestScore(20)
+        // Variables.bestScore.updateBestScore(20)
+        // if (Variables.bestScore.loadBestScore() == null) {
+        //     Variables.bestScore.saveBestScore(Variables.userData)
+        // }
+        
+        Variables.bestScore.loadBestScore()
     },
 
 
@@ -61,8 +67,8 @@ cc.Class({
                     Variables.blockLayout.moveDown(3,col)
                     
                 }
-               
-                Variables.blockLayout.randomBlock();
+                
+                // Variables.blockLayout.randomBlock();
                 break;
             case cc.macro.KEY.up:
                 console.log('Press a key UP');
@@ -71,7 +77,8 @@ cc.Class({
                     Variables.blockLayout.moveUp(0,col)
                     
                 }
-                Variables.blockLayout.randomBlock();
+                // Variables.blockLayout.countScore()
+                // Variables.blockLayout.randomBlock();
                 break;
             case cc.macro.KEY.left:
                 console.log('Press a key LEFT');
@@ -80,8 +87,8 @@ cc.Class({
                     Variables.blockLayout.moveLeft(row)
                     
                 }
-                Variables.blockLayout.countScore()
-                Variables.blockLayout.randomBlock();
+                // Variables.blockLayout.countScore()
+                // Variables.blockLayout.randomBlock();
                 break;
             case cc.macro.KEY.right:
                 console.log('Press a key RIGHT');
@@ -92,8 +99,8 @@ cc.Class({
                     
                    
                 }
-                Variables.blockLayout.countScore()
-                Variables.blockLayout.randomBlock();
+                // Variables.blockLayout.countScore()
+                // Variables.blockLayout.randomBlock();
                 break;
             default : {
                 return
@@ -102,7 +109,8 @@ cc.Class({
 
             
         }
-        
+        Variables.blockLayout.countScore()
+        Variables.blockLayout.randomBlock();
     },
     // update (dt) {},
 });

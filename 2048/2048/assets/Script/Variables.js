@@ -18,7 +18,11 @@ let Variables = {
 
     score: null,
     bestScore: null,
-    blockLayout: null
+    blockLayout: null,
+    userData: {
+        score: 0,
+        moveStep: 0
+    }
 }
 module.exports = Variables
 cc.Class({

@@ -9,6 +9,7 @@
 //  - [English] https://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
 const Emitter = require('mEmitter');
 const Variables = require('Variables');
+
 cc.Class({
     extends: cc.Component,
 
@@ -40,9 +41,24 @@ cc.Class({
     start () {
 
     },
+
     updateBestScore(number) {
         this.bestScore.string = "BEST\n" + number
     },
+    saveBestScore(userData) {
+        cc.sys.localStorage.setItem('userData', JSON.stringify(userData))
+    },
+    loadBestScore() {
+        let userData = JSON.parse(cc.sys.localStorage.getItem('userData'));
+        if (userData == null) {
+            this.saveBestScore(Variables.userData)
+            return
+        }
+        console.log(userData.score);
+        this.updateBestScore(userData.score)
+        return userData
+        
+    }
 
     // update (dt) {},
 });

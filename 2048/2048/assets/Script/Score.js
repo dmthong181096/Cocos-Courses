@@ -43,13 +43,18 @@ cc.Class({
         
     },
     updateExtraScore(number) {
+        let duration = 0.5
+        if (number == 0) {
+            return
+        }
         console.log(number);
         this.extraScoreLabel.node.active = true
         this.extraScoreLabel.string = "+ " + number
-        let actions = [
-                        cc.moveBy(0.5,0,20),
-                        cc.moveBy(0,0,-20),
+        let actions = [cc.moveTo(0,0,0),
+                        cc.moveTo(duration,0,20),
+                        cc.moveTo(0,0,-20),
                         cc.callFunc( ()=> {this.extraScoreLabel.node.active = false}),
+                        this.extraScoreLabel.node.stopAllActions(),
                     ]
         this.extraScoreLabel.node.runAction(cc.sequence(actions))
     },
