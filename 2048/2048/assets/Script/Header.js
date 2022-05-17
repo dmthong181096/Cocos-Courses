@@ -7,25 +7,7 @@
 // Learn life-cycle callbacks:
 //  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] https://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
-let Variables = {
-    rows: 4,
-    cols: 4,
-    numbers: [2,4],
-    blocks: [],
-    scoreGame: 0,
-    scoreExtra: 0,
-    // blockArr: [],
 
-
-    score: null,
-    bestScore: null,
-    blockLayout: null,
-    userData: {
-        score: 0,
-        moveStep: 0
-    }
-}
-module.exports = Variables
 cc.Class({
     extends: cc.Component,
 

@@ -54,7 +54,7 @@ cc.Class({
             this.saveBestScore(Variables.userData)
             return
         }
-        console.log(userData.score);
+        // console.log(userData.score);
         this.updateBestScore(userData.score)
         return userData
         

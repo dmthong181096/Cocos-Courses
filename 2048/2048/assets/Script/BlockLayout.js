@@ -2,22 +2,13 @@
 const Emitter = require('mEmitter');
 const Variables = require("./Variables");
 const colors = require("./Colors");
-
-
-// const UserData = new Object()
-// ({
-//     score: 0,
-//     moveStep : 0
-// })
-// const { userData } = require('./Variables');
-// const { log } = require('../../build/web-desktop/cocos2d-js');
 cc.Class({
     extends: cc.Component,
 
     properties: {
         BlockPrefab: cc.Prefabs,
         _flag: false,
-        scoreExtra: null,
+        // scoreExtra: null,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -26,26 +17,27 @@ cc.Class({
         Emitter.instance.emit('transBlockLayout', this);
         // console.log(colors);
         this.gameInit()
+        console.log(Variables.blocks);
 
     },
     gameInit() {
         this.createBlocks()
         this.data = this.createArray2D(4, 4)
-        console.log(this.data);
-
+        // console.log(this.data);
         this.randomBlock();
         this.randomBlock();
+        // console.log(Variables.blocks[1][3].getPosition())
     },
     countScore(){
-        let extra = this.scoreExtra
+        // let extra = Variables.scoreExtra
 
-        Variables.scoreGame += this.scoreExtra
+        Variables.scoreGame += Variables.scoreExtra
 
 
         let userData = new Object()
         userData.score =  Variables.scoreGame
         userData.moveStep = 10
-        // Variables.bestScore.saveBestScore(userData)
+
         let bestScore = Variables.bestScore.loadBestScore()
         console.log(bestScore.score);
         if ( userData.score >  bestScore.score) {
@@ -53,13 +45,9 @@ cc.Class({
             Variables.bestScore.saveBestScore(userData)
             Variables.bestScore.loadBestScore()
         }
-        Variables.score.updateExtraScore(extra)
-        Variables.score.updateScore( Variables.scoreGame)
-        this.scoreExtra = 0
-        // if ( Variables.scoreGame > ) {
-            
-        // }
-        // return Variables.scoreGame += score
+        Variables.score.updateExtraScore(Variables.scoreExtra)
+        Variables.score.updateScore(Variables.scoreGame)
+        Variables.scoreExtra = 0
     },
     createArray2D(row, col) {
         let arr = new Array()
@@ -73,13 +61,23 @@ cc.Class({
     },
     createBlocks() {
         Variables.blocks = this.createArray2D(4, 4)
+        let x = 100
+        let y = 180
+        let distance = 180
+        this.positions = [];
         for (let row = 0; row < Variables.blocks.length; row++) {
+            this.positions.push([0, 0, 0, 0]);
             for (let col = 0; col < Variables.blocks.length; col++) {
                 let block = cc.instantiate(this.BlockPrefab)
                 this.setLabel(block, 0)
                 block.parent = this.node
+                block.x = - distance + 20 * col+ col* x
+                block.y = y
+                // console.log(block.getPosition());
+
                 Variables.blocks[row][col] = block
             }
+            y -= 120
         }
     },
     setLabel(block, number) {
@@ -116,6 +114,13 @@ cc.Class({
         this.data[x][y] = Variables.numbers[Math.floor(Math.random() * Variables.numbers.length)];
         this.setLabel(Variables.blocks[x][y], this.data[x][y])
     },
+    moveNode(block,position) {
+        let action = cc.moveTo(2, position);
+        let finish = cc.callFunc(()=>{
+            // callback && callback()
+        });
+        block.runAction(cc.sequence(action, finish));
+    },
     moveRight(row, col = 3) {
         let isZero = true
         for (let index = 0; index < this.data[row].length; index++) {
@@ -141,14 +146,33 @@ cc.Class({
             return
         }
         if (this.data[row][col] == 0) {
+            let block =  Variables.blocks[row][col-1];
+            let position = Variables.blocks[row][col].getPosition()
+            // let position = this.positions[x][y+1];
+            Variables.blocks[row][col] = block;
             this.data[row][col] = this.data[row][col-1];
             this.data[row][col-1] = 0;
+            
+            // console.log(position);
+            // Variables.blocks[row][col] = null;
+            this.moveNode(block,position)
+
+
+            // this.data[x][y+1] = this.data[x][y];
+            // this.data[x][y] = 0;
+ 
+            // this.doMove(block, position, ()=>{
+            //     move(x, y+1, callback);
+            // });
+
         }
         this.moveRight(row, col - 1);
         this.updateBlockNum();
     },
+
     moveUp(row = 0,col) {
         let isZero = true
+        
         for (let index = 0; index <= this.data[col].length - 1; index++) {
             if (this.data[index][col] != 0) {
                
@@ -183,14 +207,14 @@ cc.Class({
         this.updateBlockNum();
     
         for (let index = 0; index < 4; index++) {
-            console.log(index);
+            // console.log(index);
             if (index == 3) {
                 return
             }
             if (this.data[index+1][col] == this.data[index][col] && this.data[index+1][col] != 0 && this.data[index][col] != 0) {
                 this.data[index][col] *= 2
                 // this.countScore(this.data[index][col])
-                this.scoreExtra += this.data[index][col]
+                Variables.scoreExtra += this.data[index][col]
                 this.data[index+1][col] = 0 
                 this.updateBlockNum();
                 this._flag = false
@@ -243,7 +267,7 @@ cc.Class({
                 this.data[index][col] *= 2
                 // this.countScore(this.data[index][col])
                 // console.log(this.data[index][col]);
-                this.scoreExtra += this.data[index][col]
+                Variables.scoreExtra += this.data[index][col]
                 this.data[index-1][col] = 0
                 this.updateBlockNum();
                 this._flag = false
@@ -253,35 +277,7 @@ cc.Class({
 
 
     },
-    // mergeRight(row) {
-    //     this.updateBlockNum();
-    //     for (let index = 3; index >= 0; index--) {
-    //         if (this.data[row][index] == this.data[row][index -1] && this.data[row][index - 1] != 0 && this.data[row][index] != 0) {
-    //             this.data[row][index] *= 2
-    //             this.data[row][index - 1] = 0
-    //             this.updateBlockNum();
-    //             this._flag = false
-    //             this.moveRight(row, 3)
-    //         }
-    //     }
-
-
-    // },
-    // mergeLeft(row) {
-    //     this.updateBlockNum();
-    //     for (let index = 0; index < 4; index++) {
-    //         if (this.data[row][index + 1] == this.data[row][index] && this.data[row][index + 1] != 0 && this.data[row][index] != 0) {
-    //             this.data[row][index] *= 2
-    //             this.data[row][index + 1] = 0
-    //             this.updateBlockNum();
-    //             this._flag = false
-    //             this.moveLeft(row, 0)
-    //         }
-    //     }
-
-
-    // },
-
+ 
     mergeBlock(row,direction) {
         this.updateBlockNum();
 
@@ -289,11 +285,11 @@ cc.Class({
         switch (direction) {
             case "Left":
                 for (let index = 0; index < 4; index++) {
-                    console.log(this.data[row][index + 1]);
+                    // console.log(this.data[row][index + 1]);
                     if (this.data[row][index + 1] == this.data[row][index] && this.data[row][index + 1] != 0 && this.data[row][index] != 0) {
                         this.data[row][index] *= 2
                         // this.countScore(this.data[row][index])
-                        this.scoreExtra += this.data[row][index]
+                        Variables.scoreExtra += this.data[row][index]
                         this.data[row][index + 1] = 0
                         this.updateBlockNum();
                         this._flag = false
@@ -304,28 +300,34 @@ cc.Class({
             case "Right":
                 for (let index = 3; index >= 0; index--) {
                     if (this.data[row][index] == this.data[row][index -1] && this.data[row][index - 1] != 0 && this.data[row][index] != 0) {
+                        // let position = Variables.blocks[row][index].getPosition()
+                        // console.log(position);
                         this.data[row][index] *= 2
+
+
+
                         // this.countScore(this.data[row][index])
-                        this.scoreExtra += this.data[row][index]
+                        Variables.scoreExtra += this.data[row][index]
                         this.data[row][index - 1] = 0
+                        // this.moveNode (Variables.blocks[row][index])
                         this.updateBlockNum();
                         this._flag = false
                         this.moveRight(row, 3)
                     }
                 }
                 break;
-            case "Up":
-                for (let index = 0; index < 4; index++) {
-                    if (this.data[row][index] == this.data[row][index + 1] && this.data[row][index + 1] != 0 && this.data[row][index] != 0) {
-                        this.data[row][index] *= 2
-                        // this.countScore(this.data[index][col])
-                        this.data[row][index + 1] = 0
-                        this.updateBlockNum();
-                        this._flag = false
-                        this.moveUp(0, col)
-                    }
-                }
-                break;
+            // case "Up":
+            //     for (let index = 0; index < 4; index++) {
+            //         if (this.data[row][index] == this.data[row][index + 1] && this.data[row][index + 1] != 0 && this.data[row][index] != 0) {
+            //             this.data[row][index] *= 2
+            //             // this.countScore(this.data[index][col])
+            //             this.data[row][index + 1] = 0
+            //             this.updateBlockNum();
+            //             this._flag = false
+            //             this.moveUp(0, col)
+            //         }
+            //     }
+            //     break;
                  
             default:
                 break;
@@ -362,79 +364,6 @@ cc.Class({
         this.moveLeft(row, col + 1);
         this.updateBlockNum();
     },
-
-
-    // moveLeft(row, col = 3) {
-    //     // console.log("Move left");
-    //     if (col == 0) {
-    //         if (this.data[row][3] == 0) {
-    //             this.moveRight(row, col = 3)
-    //         } else {
-    //             return
-    //         }
-
-    //     } else {
-    //         if (this.data[row][col] == 0) {
-    //             this.data[row][col] = this.data[row][col - 1];
-    //             this.data[row][col - 1] = 0;
-    //             this.moveLeft(row, col - 1);
-    //             // this.updateBlockNum(); 
-    //         } else {
-    //             if (this.data[row][col] == this.data[row][col - 1]) {
-    //                 this.data[row][col - 1] *= 2
-    //                 this.data[row][col] = 0
-    //             } else {
-    //                 this.moveLeft(row, col - 1)
-    //                 // this.updateBlockNum()
-    //             }
-
-    //         }
-    //         // this.moveLeft(row, col -1)
-    //         this.updateBlockNum();
-    //     }
-    // },
-    // moveDown(row = 0, col = 0) {
-    //     // console.log("Move Down");
-    //     if (row == Variables.rows - 1) {
-    //         return;
-    //     } else {
-    //         if (this.data[row + 1][col] == 0) {
-    //             this.data[row + 1][col] = this.data[row][col];
-    //             this.data[row][col] = 0
-    //             this.moveDown(row + 1, col)
-    //             this.updateBlockNum()
-    //         } else {
-    //             if (this.data[row][col] == this.data[row + 1][col]) {
-    //                 this.data[row + 1][col] *= 2
-    //                 this.data[row][col] = 0
-    //             }
-    //             this.moveDown(row + 1, col)
-    //             this.updateBlockNum()
-    //         }
-
-    //     }
-    // },
-    // moveUp(row = 0, col = 0) {
-    //     // console.log("Move Down");
-    //     if (row == 0) {
-    //         return;
-    //     } else {
-    //         if (this.data[row - 1][col] == 0) {
-    //             this.data[row - 1][col] = this.data[row][col];
-    //             this.data[row][col] = 0
-    //             this.moveUp(row - 1, col)
-    //             this.updateBlockNum()
-    //         } else {
-    //             if (this.data[row][col] == this.data[row - 1][col]) {
-    //                 this.data[row - 1][col] *= 2
-    //                 this.data[row][col] = 0
-    //             }
-    //             this.moveUp(row - 1, col)
-    //             this.updateBlockNum()
-    //         }
-
-    //     }
-    // },
     updateBlockNum: function () {
         // 更新方块数字
         for (let row = 0; row < 4; row++) {
