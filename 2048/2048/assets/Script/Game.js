@@ -61,6 +61,7 @@ cc.Class({
                     Variables.blockLayout.moveDown(3,col)
                     
                 }
+               
                 Variables.blockLayout.randomBlock();
                 break;
             case cc.macro.KEY.up:
@@ -79,6 +80,7 @@ cc.Class({
                     Variables.blockLayout.moveLeft(row)
                     
                 }
+                Variables.blockLayout.countScore()
                 Variables.blockLayout.randomBlock();
                 break;
             case cc.macro.KEY.right:
@@ -90,6 +92,7 @@ cc.Class({
                     
                    
                 }
+                Variables.blockLayout.countScore()
                 Variables.blockLayout.randomBlock();
                 break;
             default : {

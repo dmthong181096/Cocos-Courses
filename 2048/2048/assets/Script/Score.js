@@ -13,7 +13,8 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        scoreLabel: cc.Label
+        scoreLabel: cc.Label,
+        extraScoreLabel: cc.Label
         // foo: {
         //     // ATTRIBUTES:
         //     default: null,        // The default value will be used only when the component attaching
@@ -35,15 +36,27 @@ cc.Class({
 
     onLoad () {
         Emitter.instance.emit('transScore', this);
+        this.extraScoreLabel.node.active = false;
     },
 
     start () {
         
     },
+    updateExtraScore(number) {
+        console.log(number);
+        this.extraScoreLabel.node.active = true
+        this.extraScoreLabel.string = "+ " + number
+        let actions = [
+                        cc.moveBy(0.5,0,20),
+                        cc.moveBy(0,0,-20),
+                        cc.callFunc( ()=> {this.extraScoreLabel.node.active = false}),
+                    ]
+        this.extraScoreLabel.node.runAction(cc.sequence(actions))
+    },
     updateScore(number) {
         
         this.scoreLabel.string = "SCORE\n" + number
-        console.log( this.scoreLabel.string)
+        // console.log( this.scoreLabel.string)
     }
     // update (dt) {},
 });

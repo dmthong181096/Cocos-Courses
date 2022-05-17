@@ -8,7 +8,8 @@ cc.Class({
 
     properties: {
         BlockPrefab: cc.Prefabs,
-        _flag: false
+        _flag: false,
+        scoreExtra: null,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -27,9 +28,13 @@ cc.Class({
         this.randomBlock();
         this.randomBlock();
     },
-    countScore(score){
-        Variables.scoreGame += score
-        Variables.score.updateScore(Variables.scoreGame)
+    countScore(){
+        let extra = this.scoreExtra
+
+        Variables.scoreGame += this.scoreExtra
+        Variables.score.updateExtraScore(extra)
+        Variables.score.updateScore( Variables.scoreGame)
+        this.scoreExtra = 0
         // return Variables.scoreGame += score
     },
     createArray2D(row, col) {
@@ -108,6 +113,7 @@ cc.Class({
             if (this._flag) {
                 this.mergeBlock(row,"Right")
             }
+            // this.countScore()
             return
         }
         if (this.data[row][col] == 0) {
@@ -139,6 +145,7 @@ cc.Class({
             if (this._flag) {
                 this.mergeUp(col)
             }
+            // this.countScore()
             return
         }
         if (this.data[row][col] == 0) {
@@ -158,8 +165,9 @@ cc.Class({
             }
             if (this.data[index+1][col] == this.data[index][col] && this.data[index+1][col] != 0 && this.data[index][col] != 0) {
                 this.data[index][col] *= 2
-                this.countScore(this.data[index][col])
-                this.data[index+1][col] = 0
+                // this.countScore(this.data[index][col])
+                this.scoreExtra += this.data[index][col]
+                this.data[index+1][col] = 0 
                 this.updateBlockNum();
                 this._flag = false
                 this.moveUp(0,col);
@@ -203,14 +211,15 @@ cc.Class({
         this.updateBlockNum();
     
         for (let index = 3; index >= 0; index--) {
-            console.log(index);
+            // console.log(index);
             if (index == 0) {
                 return
             }
             if (this.data[index][col] == this.data[index-1][col] && this.data[index-1][col] != 0 && this.data[index][col] != 0) {
                 this.data[index][col] *= 2
-                this.countScore(this.data[index][col])
+                // this.countScore(this.data[index][col])
                 // console.log(this.data[index][col]);
+                this.scoreExtra += this.data[index][col]
                 this.data[index-1][col] = 0
                 this.updateBlockNum();
                 this._flag = false
@@ -259,7 +268,8 @@ cc.Class({
                     console.log(this.data[row][index + 1]);
                     if (this.data[row][index + 1] == this.data[row][index] && this.data[row][index + 1] != 0 && this.data[row][index] != 0) {
                         this.data[row][index] *= 2
-                        this.countScore(this.data[row][index])
+                        // this.countScore(this.data[row][index])
+                        this.scoreExtra += this.data[row][index]
                         this.data[row][index + 1] = 0
                         this.updateBlockNum();
                         this._flag = false
@@ -271,7 +281,8 @@ cc.Class({
                 for (let index = 3; index >= 0; index--) {
                     if (this.data[row][index] == this.data[row][index -1] && this.data[row][index - 1] != 0 && this.data[row][index] != 0) {
                         this.data[row][index] *= 2
-                        this.countScore(this.data[row][index])
+                        // this.countScore(this.data[row][index])
+                        this.scoreExtra += this.data[row][index]
                         this.data[row][index - 1] = 0
                         this.updateBlockNum();
                         this._flag = false
@@ -283,7 +294,7 @@ cc.Class({
                 for (let index = 0; index < 4; index++) {
                     if (this.data[row][index] == this.data[row][index + 1] && this.data[row][index + 1] != 0 && this.data[row][index] != 0) {
                         this.data[row][index] *= 2
-                        this.countScore(this.data[index][col])
+                        // this.countScore(this.data[index][col])
                         this.data[row][index + 1] = 0
                         this.updateBlockNum();
                         this._flag = false
@@ -317,6 +328,7 @@ cc.Class({
             if (this._flag) {
                 this.mergeBlock(row,"Left")
             }
+            // this.countScore()
             return
         }
         if (this.data[row][col] == 0) {
