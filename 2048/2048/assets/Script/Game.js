@@ -57,16 +57,20 @@ cc.Class({
             case cc.macro.KEY.down:
                 console.log('Press a key DOWN');
                 for (let col = 0; col < 4; col++) {
-                    Variables.blockLayout.moveDown(0 , col)
+                    Variables.blockLayout._flag = true
+                    Variables.blockLayout.moveDown(3,col)
                     
                 }
+                Variables.blockLayout.randomBlock();
                 break;
             case cc.macro.KEY.up:
                 console.log('Press a key UP');
-                for (let col = 0; col < 4; col++) {
-                    Variables.blockLayout.moveUp(3 , col)
+                for (let col = 0; col <= 3; col++) {
+                    Variables.blockLayout._flag = true
+                    Variables.blockLayout.moveUp(0,col)
                     
                 }
+                Variables.blockLayout.randomBlock();
                 break;
             case cc.macro.KEY.left:
                 console.log('Press a key LEFT');
