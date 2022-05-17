@@ -2,6 +2,7 @@
 const Emitter = require('mEmitter');
 const Variables = require("./Variables");
 const colors = require("./Colors");
+// const { log } = require('../../build/web-desktop/cocos2d-js');
 cc.Class({
     extends: cc.Component,
 
@@ -26,7 +27,11 @@ cc.Class({
         this.randomBlock();
         this.randomBlock();
     },
-
+    countScore(score){
+        Variables.scoreGame += score
+        Variables.score.updateScore(Variables.scoreGame)
+        // return Variables.scoreGame += score
+    },
     createArray2D(row, col) {
         let arr = new Array()
         for (let i = 0; i < row; i++) {
@@ -153,6 +158,7 @@ cc.Class({
             }
             if (this.data[index+1][col] == this.data[index][col] && this.data[index+1][col] != 0 && this.data[index][col] != 0) {
                 this.data[index][col] *= 2
+                this.countScore(this.data[index][col])
                 this.data[index+1][col] = 0
                 this.updateBlockNum();
                 this._flag = false
@@ -203,6 +209,8 @@ cc.Class({
             }
             if (this.data[index][col] == this.data[index-1][col] && this.data[index-1][col] != 0 && this.data[index][col] != 0) {
                 this.data[index][col] *= 2
+                this.countScore(this.data[index][col])
+                // console.log(this.data[index][col]);
                 this.data[index-1][col] = 0
                 this.updateBlockNum();
                 this._flag = false
@@ -251,6 +259,7 @@ cc.Class({
                     console.log(this.data[row][index + 1]);
                     if (this.data[row][index + 1] == this.data[row][index] && this.data[row][index + 1] != 0 && this.data[row][index] != 0) {
                         this.data[row][index] *= 2
+                        this.countScore(this.data[row][index])
                         this.data[row][index + 1] = 0
                         this.updateBlockNum();
                         this._flag = false
@@ -262,6 +271,7 @@ cc.Class({
                 for (let index = 3; index >= 0; index--) {
                     if (this.data[row][index] == this.data[row][index -1] && this.data[row][index - 1] != 0 && this.data[row][index] != 0) {
                         this.data[row][index] *= 2
+                        this.countScore(this.data[row][index])
                         this.data[row][index - 1] = 0
                         this.updateBlockNum();
                         this._flag = false
@@ -273,6 +283,7 @@ cc.Class({
                 for (let index = 0; index < 4; index++) {
                     if (this.data[row][index] == this.data[row][index + 1] && this.data[row][index + 1] != 0 && this.data[row][index] != 0) {
                         this.data[row][index] *= 2
+                        this.countScore(this.data[index][col])
                         this.data[row][index + 1] = 0
                         this.updateBlockNum();
                         this._flag = false

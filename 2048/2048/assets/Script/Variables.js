@@ -12,6 +12,7 @@ let Variables = {
     cols: 4,
     numbers: [2,4],
     blocks: [],
+    scoreGame: 0,
     // blockArr: [],
 
 

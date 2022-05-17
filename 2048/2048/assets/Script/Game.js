@@ -47,7 +47,7 @@ cc.Class({
         this.init()
     },
     init() {
-        Variables.score.updateScore(10)
+        // Variables.score.updateScore(10)
         Variables.bestScore.updateBestScore(20)
     },
 
