@@ -71,8 +71,8 @@ cc.Class({
                 let block = cc.instantiate(this.BlockPrefab)
                 this.setLabel(block, 0)
                 block.parent = this.node
-                block.x = - distance + 20 * col+ col* x
-                block.y = y
+                    // block.x = - distance + 20 * col+ col* x
+                    // block.y = y
                 // console.log(block.getPosition());
 
                 Variables.blocks[row][col] = block
@@ -146,16 +146,16 @@ cc.Class({
             return
         }
         if (this.data[row][col] == 0) {
-            let block =  Variables.blocks[row][col-1];
-            let position = Variables.blocks[row][col].getPosition()
+            // let block =  Variables.blocks[row][col-1];
+            // let position = Variables.blocks[row][col].getPosition()
             // let position = this.positions[x][y+1];
-            Variables.blocks[row][col] = block;
+            // Variables.blocks[row][col] = block;
             this.data[row][col] = this.data[row][col-1];
             this.data[row][col-1] = 0;
             
             // console.log(position);
             // Variables.blocks[row][col] = null;
-            this.moveNode(block,position)
+            // this.moveNode(block,position)
 
 
             // this.data[x][y+1] = this.data[x][y];
